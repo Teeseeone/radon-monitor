@@ -11,4 +11,4 @@ class RadonEntity(CoordinatorEntity):
         super().__init__(coordinator)
         self._attr_unique_id = f"{coordinator.entry.entry_id}_{key}"
         self._attr_name = name
-        self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.entry.entry_id)}, name=coordinator.entry.title, manufacturer="Radon Monitor", model="Virtual radon monitor")
+        self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.entry.entry_id)}, name=coordinator.entry.title, manufacturer="Radon Monitor", model="Virtual radon monitor", configuration_url="https://github.com/Teeseeone/radon-monitor#radon-guidance")
