@@ -37,3 +37,17 @@ Use a separate source so the real sensor history stays intact:
 - Check Settings → System → Logs for `radon_monitor` errors.
 
 Record the HA version, source unit, observed entities, notification result and any logs in a GitHub issue. The initial local checks do not replace this installation testing.
+
+## Bundled card (0.2.0)
+
+Run `node tests/test_card.cjs` for dependency-free rendering checks. These checks exercise formatting and events with a minimal DOM fixture; they are not a browser or HA frontend runtime test.
+
+After adding the resource described in README, check the card in a real HA dashboard:
+
+- Select your concentration sensor using the visual editor; confirm all five averages and coverage match Developer Tools.
+- Tap current/average/alert rows and confirm the correct more-info dialog opens.
+- Verify the source statistics graph loads, and turn it off for a compact card.
+- Try dark/light themes and phone width; no clipped values or horizontal scrolling.
+- Use the simulated test source described above to exercise high, recovery, missing-source and sensor-problem states.
+- For renamed sensors, select the optional entity overrides.
+- After updating an existing 0.1.0 install, check the Integrations tile and confirm entity IDs and configuration are retained.

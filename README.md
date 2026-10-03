@@ -1,4 +1,6 @@
-# Radon Monitor — 0.1.0 experimental
+# Radon Monitor — 0.2.0 experimental
+
+![Radon Monitor](docs/banner.svg)
 
 A UI-configured Home Assistant integration that monitors an existing radon sensor.
 Built for `sensor.view_plus_radon`, without needing Airthings credentials or editing YAML.
@@ -18,8 +20,6 @@ Supports Bq/m³, Bq/m3 and pCi/L (converted to Bq/m³).
 
 ## Install through HACS
 
-Once this repository has been published:
-
 1. HACS → three-dot menu → Custom repositories.
 2. Add `https://github.com/Teeseeone/radon-monitor`, type **Integration**.
 3. Find **Radon Monitor**, download and restart Home Assistant.
@@ -30,6 +30,42 @@ Once this repository has been published:
 For manual testing, copy `custom_components/radon_monitor` into `/config/custom_components/radon_monitor`, restart, then follow steps 4–6.
 
 Requires Home Assistant 2026.9 or newer and Recorder.
+
+## Update from 0.1.0
+
+Download the latest version in HACS and restart Home Assistant. Radon Monitor now appears under **Settings → Devices & services → Integrations**, with its existing device and entities. Entity IDs, configuration and statistics are retained; do not delete and recreate your monitor.
+
+## Bundled Radon Monitor card
+
+![Card design preview](docs/card-preview.png)
+
+The design preview uses sample values and hides the optional source trend. The card respects your dashboard theme and supports small screens. It reads integration status and sustained alerts rather than calculating separate thresholds. All readings are clickable. It never operates ventilation equipment.
+
+After installing/updating and restarting:
+
+1. Enable Advanced Mode in your HA user profile if Resources is hidden.
+2. **Settings → Dashboards → three-dot menu → Resources → Add resource**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.0`; type: **JavaScript module**.
+4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
+5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
+
+The resource is served by the installed integration, so a separate HACS dashboard repository is not required. Resource registration is manual in this first version; the integration does not alter dashboard configuration. The frontend must be loaded after an integration entry has been set up. If using YAML dashboards, add the same URL with `type: module` to your Lovelace resources.
+
+A complete starter card:
+
+```yaml
+type: custom:radon-monitor-card
+name: Radon Monitor
+entity: sensor.radon_monitor_concentration
+show_graph: true
+days_to_show: 7
+```
+
+The source trend uses HA's built-in statistics graph with hourly means from the original source. Average entity history starts at installation; its numeric value still uses earlier source statistics. Trend days can be set from 1 to 30 in the editor. Turn off **Show source trend** for a compact card. Coverage is hourly bucket availability. Partial history is visibly marked.
+
+### Branding
+
+Original vector icon and banner are in `docs/`. These are repository and card assets. Home Assistant's integration tile icon still requires an accepted entry in the separate **home-assistant/brands** repository; adding a file here alone does not register it globally. Branding submission remains a separate step before public HACS catalogue inclusion.
 
 ## Default behavior
 
@@ -60,7 +96,7 @@ Hourly means are weighted by overlap with the requested window. Coverage indicat
 
 Calendar months and years are used for 6-month, 1-year and 2-year windows, including leap years. For an Airthings sensor reporting a rolling 24-hour value, these are averages of that reported value. They are for home trend monitoring and should not be presented as a certified radon measurement.
 
-Long-term statistics survive normal Recorder history purges. Database deletion, targeted statistics deletion or loss of the database removes that history; include it in backups. Use HA's History / statistics graph UI to browse historical values. No dedicated chart card is bundled.
+Long-term statistics survive normal Recorder history purges. Database deletion, targeted statistics deletion or loss of the database removes that history; include it in backups. Use HA's History / statistics graph UI to browse historical values. A bundled dashboard card displays concentration, all five averages, hourly coverage, alert states and an optional source statistics graph.
 
 ## Existing alternatives and scope
 
