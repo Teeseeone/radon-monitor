@@ -1,4 +1,4 @@
-# Radon Monitor — 0.2.0 experimental
+# Radon Monitor — 0.2.1 experimental
 
 ![Radon Monitor](docs/banner.svg)
 
@@ -39,13 +39,13 @@ Download the latest version in HACS and restart Home Assistant. Radon Monitor no
 
 ![Card design preview](docs/card-preview.png)
 
-The design preview uses sample values and hides the optional source trend. The card respects your dashboard theme and supports small screens. It reads integration status and sustained alerts rather than calculating separate thresholds. All readings are clickable. It never operates ventilation equipment.
+The design preview uses sample values and hides the optional source trend. The card uses the selected original A house icon and a navy-and-mint style by default. Its visual editor also offers Dashboard theme appearance. It supports small screens. It reads integration status and sustained alerts rather than calculating separate thresholds. All readings are clickable. It never operates ventilation equipment.
 
 After installing/updating and restarting:
 
 1. Enable Advanced Mode in your HA user profile if Resources is hidden.
 2. **Settings → Dashboards → three-dot menu → Resources → Add resource**.
-3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.0`; type: **JavaScript module**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.1`; type: **JavaScript module**.
 4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
 5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
 
@@ -65,7 +65,9 @@ The source trend uses HA's built-in statistics graph with hourly means from the 
 
 ### Branding
 
-Original vector icon and banner are in `docs/`. These are repository and card assets. Home Assistant's integration tile icon still requires an accepted entry in the separate **home-assistant/brands** repository; adding a file here alone does not register it globally. Branding submission remains a separate step before public HACS catalogue inclusion.
+Original A branding is shared by the integration, card and repository. Light/dark icons and high-density variants are bundled in `custom_components/radon_monitor/brand/`. Home Assistant 2026.3+ serves these locally, so an external brands submission is not needed for the HA integration tile. Refresh the frontend after updating and restarting. HACS listing/update artwork can depend on the HACS version and its own image source; a CDN-based listing may still show its placeholder.
+
+Source: [Home Assistant local brand images](https://developers.home-assistant.io/blog/2026/02/24/brands-proxy-api/).
 
 ## Default behavior
 
@@ -118,7 +120,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q custom_components
 ```
 
-CI also runs hassfest and HACS validation. Branding is temporarily excluded from HACS CI; add an approved Home Assistant Brands entry before applying for the public catalogue.
+CI also runs hassfest and HACS validation. HACS branding validation is temporarily excluded while verifying its compatibility with bundled local brand images. This repository is available as a custom repository; it has not been submitted to the public catalogue.
 
 ## Radon interpretation
 

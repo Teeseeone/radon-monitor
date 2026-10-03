@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+- Adopt the selected original A house-and-radon icon across the integration, card and repository.
+- Bundle light/dark PNG icons at 256 and 512 pixels using HA local brand support.
+- Use navy-and-mint card styling by default; keep Dashboard theme as an editor option.
+- Refresh resource URLs to v0.2.1 and correct the outdated external brands submission instructions.
+
 ## 0.2.0
 
 - Display Radon Monitor on the Integrations page using the service classification.
