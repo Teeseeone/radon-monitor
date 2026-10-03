@@ -1,7 +1,9 @@
 """UI-configured radon monitoring with Recorder-backed averages."""
+from pathlib import Path
 from datetime import timedelta
 import logging
 from homeassistant.const import Platform
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import callback
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.storage import Store
@@ -14,6 +16,14 @@ from .engine import AlertState, PERIODS, average, concentration, window_start
 
 _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
+
+
+async def async_setup(hass, config):
+    """Serve the bundled dashboard card once per HA process."""
+    await hass.http.async_register_static_paths([StaticPathConfig(
+        "/radon_monitor/radon-monitor-card.js",
+        str(Path(__file__).parent / "www" / "radon-monitor-card.js"), False)])
+    return True
 
 
 async def async_setup_entry(hass, entry):
