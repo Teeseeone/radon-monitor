@@ -11,8 +11,8 @@ class RadonMonitorCard extends HTMLElement {
  static getStubConfig(hass){const entity=Object.keys(hass?.states||{}).find(id=>id.startsWith('sensor.')&&id.endsWith('_concentration')&&hass.states[id].attributes.radon_monitor_derived);return {entity:entity||'sensor.radon_monitor_concentration',name:'Radon Monitor',show_graph:true};}
  setConfig(config){if(!config.entity?.startsWith('sensor.'))throw new Error('Select the Radon Monitor concentration sensor.');this.config={show_graph:true,show_info:true,appearance:'brand',...config};this.graph=null;this.graphKey=null;this.render();}
  set hass(hass){this._hass=hass;this.render();}
- getCardSize(){return this.config?.show_graph?8:5;}
- getGridOptions(){return {columns:12,rows:this.config?.show_graph?8:5,min_columns:6,min_rows:5};}
+ getCardSize(){return (this.config?.show_graph?8:5)+(this.config?.show_info?4:0);}
+ getGridOptions(){return {columns:12,rows:this.getCardSize(),min_columns:6,min_rows:5};}
  entity(key){if(this.config[key+'_entity'])return this.config[key+'_entity'];const base=this.config.entity.replace(/^sensor\./,'').replace(/_concentration$/,'');return `${key.startsWith('sustained_')||key==='sensor_problem'?'binary_sensor':'sensor'}.${base}_${key}`;}
  state(id){return this._hass?.states[id];}
  more(id){this.dispatchEvent(new CustomEvent('hass-more-info',{detail:{entityId:id},bubbles:true,composed:true}));}
@@ -36,7 +36,7 @@ class RadonMonitorCard extends HTMLElement {
 }
 class RadonMonitorEditor extends HTMLElement {
  constructor(){super();this.attachShadow({mode:'open'});}
- setConfig(config){this.config={...config};this.render();}
+ setConfig(config){this.config={show_info:true,...config};this.render();}
  set hass(hass){this._hass=hass;this.render();}
  render(){if(!this.config||!this._hass)return;if(!this.form){this.form=document.createElement('ha-form');this.form.computeLabel=s=>s.label;this.form.addEventListener('value-changed',event=>{this.config={...this.config,...event.detail.value};this.dispatchEvent(new CustomEvent('config-changed',{detail:{config:this.config},bubbles:true,composed:true}));});this.shadowRoot.append(this.form);}
  this.form.hass=this._hass;this.form.data=this.config;
