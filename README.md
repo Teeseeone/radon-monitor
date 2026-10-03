@@ -1,4 +1,4 @@
-# Radon Monitor — 0.2.1 experimental
+# Radon Monitor — 0.2.2 experimental
 
 ![Radon Monitor](docs/banner.svg)
 
@@ -45,7 +45,7 @@ After installing/updating and restarting:
 
 1. Enable Advanced Mode in your HA user profile if Resources is hidden.
 2. **Settings → Dashboards → three-dot menu → Resources → Add resource**.
-3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.1`; type: **JavaScript module**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.2`; type: **JavaScript module**.
 4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
 5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
 
@@ -129,3 +129,15 @@ Norwegian DSA guidance uses annual-average exposure. A short-term reading over 1
 ## License
 
 MIT. Experimental, community-maintained custom integration.
+
+## Radon guidance
+
+Radon is an invisible, odourless radioactive gas. Long-term exposure increases lung cancer risk. Lower levels are better.
+
+Norway's DSA recommends reducing radon when the **annual average exceeds 100 Bq/m³**, and keeping levels as low as practical and **below 200 Bq/m³**. Below 100 is below the action level, not a guarantee of zero risk. These limits apply to annual averages, not individual spikes; sustained alerts remain an early advisory.
+
+Improved ventilation, sealing cracks and pipe penetrations towards the ground, and a radon extraction system (radonsug/radon sump) can help. The appropriate measures depend on the source. Remeasure after changes to confirm the effect.
+
+Official sources: [DSA recommended levels](https://www.dsa.no/radon/anbefalte-grenser-for-radon), [DSA reduction measures](https://www.dsa.no/radon/tiltak-mot-radon), and [DSA measurement guidance](https://www.dsa.no/radon/slik-maler-du-radon).
+
+The device page's **Visit** link opens this guide. Home Assistant's standard Device info box has no free-text description field. The bundled card shows a short explanation by default; disable **Show radon explanation (Norway)** in its visual editor, or set `show_info: false`. These guidance values do not change your configurable alert thresholds.

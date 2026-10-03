@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+- Add a short Norway-specific radon explanation to the card, with annual-average guidance and ventilation, sealing and extraction measures.
+- Link official DSA sources and add an editor option to hide the explanation.
+- Add a device-page Visit link to the radon guide. Alert settings and sensor IDs are unchanged.
+
 ## 0.2.1
 
 - Adopt the selected original A house-and-radon icon across the integration, card and repository.
