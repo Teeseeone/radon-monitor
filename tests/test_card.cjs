@@ -25,5 +25,7 @@ states['sensor.radon_monitor_concentration'].state='unavailable';card.hass={stat
 states['sensor.radon_monitor_concentration'].state='0';card.hass={states};assert.match(card.shadowRoot.innerHTML,/class="reading">0</);
 card.setConfig({entity:'sensor.room_concentration',status_entity:'sensor.custom_status',show_graph:false});assert.equal(card.entity('status'),'sensor.custom_status');assert.equal(card.entity('1_year_average'),'sensor.room_1_year_average');
 const Editor=registry.get('radon-monitor-card-editor');const editor=new Editor();editor.setConfig({entity:'sensor.room_concentration'});editor.hass={states};assert.equal(editor.form.data.entity,'sensor.room_concentration');assert.ok(editor.form.schema.some(s=>s.name==='2_years_average_entity'));
+card.setConfig({entity:'sensor.room_concentration',show_graph:false});card.hass={states};assert.match(card.shadowRoot.innerHTML,/--ha-card-background:#082c4c/);
+card.setConfig({entity:'sensor.room_concentration',appearance:'theme',show_graph:false});card.hass={states};assert.doesNotMatch(card.shadowRoot.innerHTML,/--ha-card-background:#082c4c/);
 assert.equal(context.window.customCards.length,1);
 console.log('Card rendering checks passed: valid/zero/missing values, alerts, partial coverage, escaping, entity overrides, editor and more-info event.');
