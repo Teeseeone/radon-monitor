@@ -1,0 +1,17 @@
+{
+  "domain": "radon_monitor",
+  "name": "Radon Monitor",
+  "codeowners": [
+    "@Teeseeone"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "recorder"
+  ],
+  "documentation": "https://github.com/Teeseeone/radon-monitor",
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/Teeseeone/radon-monitor/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

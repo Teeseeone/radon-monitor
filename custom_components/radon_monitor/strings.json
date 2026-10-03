@@ -1,0 +1,43 @@
+{
+  "title": "Radon Monitor",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Radon Monitor",
+        "description": "Select an existing radon sensor. Historical averages require recorded long-term statistics for this source.",
+        "data": {
+          "name": "Monitor name",
+          "source": "Radon sensor"
+        }
+      }
+    },
+    "error": {
+      "invalid_unit": "Select a sensor with Bq/m\u00b3, Bq/m3 or pCi/L units.",
+      "derived_source": "Select the original device sensor, not a Radon Monitor derived sensor."
+    },
+    "abort": {
+      "already_configured": "This source sensor is already monitored."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Radon monitoring settings",
+        "description": "Status updates immediately; notifications wait for the configured persistence. Missing data interrupts concentration timers.",
+        "data": {
+          "warning": "Elevated threshold (Bq/m\u00b3)",
+          "high": "High threshold (Bq/m\u00b3)",
+          "recovery": "Recovery / watch threshold (Bq/m\u00b3)",
+          "delay_hours": "Elevated / high persistence (hours)",
+          "recovery_hours": "Recovery persistence (hours)",
+          "problem_hours": "Invalid / stale persistence before notification (hours)",
+          "stale_hours": "Maximum age of source report (hours)",
+          "notification_service": "Notification destination"
+        }
+      }
+    },
+    "error": {
+      "invalid_thresholds": "Recovery must be lower than elevated, and elevated lower than high."
+    }
+  }
+}
