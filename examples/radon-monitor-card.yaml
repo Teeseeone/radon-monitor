@@ -1,0 +1,5 @@
+type: custom:radon-monitor-card
+name: Radon Monitor
+entity: sensor.radon_monitor_concentration
+show_graph: true
+days_to_show: 7
