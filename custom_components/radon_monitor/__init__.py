@@ -27,7 +27,7 @@ async def async_setup(hass, config):
     await hass.http.async_register_static_paths([StaticPathConfig(
         "/radon_monitor/radon-monitor-card.js",
         str(Path(__file__).parent / "www" / "radon-monitor-card.js"), False)])
-    card_url = "/radon_monitor/radon-monitor-card.js?v=0.2.4"
+    card_url = "/radon_monitor/radon-monitor-card.js?v=0.2.5"
     try:
         resources = hass.data[LOVELACE_DATA].resources
         if isinstance(resources, ResourceStorageCollection):
