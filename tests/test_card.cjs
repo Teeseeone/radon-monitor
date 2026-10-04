@@ -32,7 +32,7 @@ console.log('Card rendering checks passed: valid/zero/missing values, alerts, pa
 (async()=>{
  const stable=new Card();stable.setConfig({entity:'sensor.test_concentration',show_graph:true});
  let creates=0, mounts=0, resets=0;
- const configs=[];const graphNode={firstElementChild:null,replaceChildren(...children){mounts++;this.firstElementChild=children[0]||null;}};
+ let graphUpdates=0;const configs=[];const graphNode={firstElementChild:null,replaceChildren(...children){mounts++;this.firstElementChild=children[0]||null;}};
  const details={open:false};const body={innerHTML:'',querySelector:s=>s==='.radon-info'?details:null};const style={textContent:''};
  stable.shadowRoot.querySelector=selector=>selector==='#graph'?graphNode:selector==='.body'?body:selector==='style'?style:null;
  let finishHelpers;context.window.loadCardHelpers=()=>new Promise(resolve=>{finishHelpers=resolve;});
@@ -41,11 +41,11 @@ console.log('Card rendering checks passed: valid/zero/missing values, alerts, pa
  assert.equal(mounts,1); // pending graph cleared once; unrelated update skipped
  fixture={...fixture,'sensor.test_concentration':{state:'45',attributes:{source:'sensor.source'}}};stable.hass={states:fixture};
  assert.equal(mounts,1); // no second graph request while helpers are pending
- finishHelpers({createCardElement:config=>{creates++;configs.push(config);return {};}});await new Promise(resolve=>setImmediate(resolve));
- assert.equal(creates,1);assert.equal(mounts,2);const graph=graphNode.firstElementChild;
+ finishHelpers({createCardElement:config=>{creates++;configs.push(config);return {set hass(value){graphUpdates++;}};}});await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(creates,1);assert.equal(mounts,2);assert.equal(graphUpdates,1);const graph=graphNode.firstElementChild;
  details.open=true;fixture={...fixture,'sensor.test_concentration':{state:'46',attributes:{source:'sensor.source'}}};stable.hass={states:fixture};await new Promise(resolve=>setImmediate(resolve));
- assert.equal(graphNode.firstElementChild,graph);assert.equal(mounts,2);assert.equal(details.open,true);
- stable.selectedDays=730;context.window.loadCardHelpers=async()=>({createCardElement:config=>{creates++;configs.push(config);return {};}});stable.render();await new Promise(resolve=>setImmediate(resolve));assert.equal(creates,2);assert.equal(configs[1].days_to_show,730);assert.equal(configs[1].period,'day');assert.notEqual(graphNode.firstElementChild,graph);stable.hass={states:{...fixture,'sensor.other':{state:'99'}}};assert.equal(creates,2);
+ assert.equal(graphNode.firstElementChild,graph);assert.equal(mounts,2);assert.equal(details.open,true);assert.equal(graphUpdates,1);const resetMounts=mounts;stable.setConfig({entity:'sensor.test_concentration',show_graph:true});assert.equal(mounts,resetMounts);
+ stable.selectedDays=730;context.window.loadCardHelpers=async()=>({createCardElement:config=>{creates++;configs.push(config);return {set hass(value){graphUpdates++;}};}});stable.render();await new Promise(resolve=>setImmediate(resolve));assert.equal(creates,2);assert.equal(configs[1].days_to_show,730);assert.equal(configs[1].period,'day');assert.notEqual(graphNode.firstElementChild,graph);stable.hass={states:{...fixture,'sensor.other':{state:'99'}}};assert.equal(creates,2);
  console.log('Graph lifecycle checks passed: unrelated updates skipped, pending helpers shared, graph stays mounted and explanation state preserved.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
 
@@ -59,3 +59,10 @@ compact.setConfig({entity:'sensor.radon_monitor_concentration',show_graph:false,
 compact.setConfig({entity:'sensor.radon_monitor_concentration',show_graph:false,averages:[]});assert.doesNotMatch(compact.shadowRoot.innerHTML,/Rolling averages ·/);
 editor.form.listeners['value-changed']({detail:{value:{...editor.form.data,days_to_show:'730',show_info:false,averages:['1_year']}}});assert.equal(editor.event.detail.config.days_to_show,730);assert.equal(editor.event.detail.config.show_info,false);assert.equal(editor.event.detail.config.averages[0],'1_year');assert.equal(editor.event.type,'config-changed');
 console.log('Visual editor and compact display checks passed.');
+
+const quiet=new Card();quiet.setConfig({entity:'sensor.quiet_concentration',show_graph:false});let renders=0;quiet.render=()=>{renders++;};
+quiet.hass={states:{'sensor.quiet_concentration':{state:'40',attributes:{source:'sensor.source'},last_updated:'a'},'sensor.quiet_status':{state:'normal',attributes:{source_age_seconds:1}},'sensor.source':{state:'40',attributes:{}}}};
+quiet.hass={states:{'sensor.quiet_concentration':{state:'40',attributes:{source:'sensor.source'},last_updated:'b'},'sensor.quiet_status':{state:'normal',attributes:{source_age_seconds:2}},'sensor.source':{state:'41',attributes:{}}}};assert.equal(renders,1);
+quiet.hass={states:{'sensor.quiet_concentration':{state:'41',attributes:{source:'sensor.source'}},'sensor.quiet_status':{state:'normal',attributes:{source_age_seconds:3}}}};assert.equal(renders,2);assert.equal(quiet.getGridOptions().rows,'auto');
+const formData=editor.form.data;editor.hass={states:{}};assert.equal(editor.form.data,formData);
+console.log('Timestamp filtering, graph throttling, repeated config and automatic height checks passed.');
