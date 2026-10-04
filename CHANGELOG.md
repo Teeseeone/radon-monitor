@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3
+
+- Register the card resource automatically, updating existing versions without creating another entry; use frontend module loading for YAML resources.
+- Collapse About radon by default and preserve its expanded state during updates.
+- Keep the graph mounted during relevant sensor updates and skip unrelated HA state changes. Prevent concurrent graph creation while card helpers load.
+
 ## 0.2.2
 
 - Add a short Norway-specific radon explanation to the card, with annual-average guidance and ventilation, sealing and extraction measures.

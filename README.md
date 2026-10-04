@@ -1,4 +1,4 @@
-# Radon Monitor — 0.2.2 experimental
+# Radon Monitor — 0.2.3 experimental
 
 ![Radon Monitor](docs/banner.svg)
 
@@ -44,12 +44,12 @@ The design preview uses sample values and hides the optional source trend. The c
 After installing/updating and restarting:
 
 1. Enable Advanced Mode in your HA user profile if Resources is hidden.
-2. **Settings → Dashboards → three-dot menu → Resources → Add resource**.
-3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.2`; type: **JavaScript module**.
+2. The integration automatically registers its card resource. Restart HA and refresh the frontend after updating. For manual fallback, use **Settings → Dashboards → three-dot menu → Resources → Add resource**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.3`; type: **JavaScript module**.
 4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
 5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
 
-The resource is served by the installed integration, so a separate HACS dashboard repository is not required. Resource registration is manual in this first version; the integration does not alter dashboard configuration. The frontend must be loaded after an integration entry has been set up. If using YAML dashboards, add the same URL with `type: module` to your Lovelace resources.
+The resource is served by the installed integration, so a separate HACS dashboard repository is not required. Storage-mode dashboard resources are registered automatically; existing URLs for this card are updated in place. YAML resource configuration is left untouched and the card is loaded through the frontend module API instead. Existing manual resources may remain. The frontend must be loaded after an integration entry has been set up. If using YAML dashboards, add the same URL with `type: module` to your Lovelace resources.
 
 A complete starter card:
 
@@ -140,4 +140,4 @@ Improved ventilation, sealing cracks and pipe penetrations towards the ground, a
 
 Official sources: [DSA recommended levels](https://www.dsa.no/radon/anbefalte-grenser-for-radon), [DSA reduction measures](https://www.dsa.no/radon/tiltak-mot-radon), and [DSA measurement guidance](https://www.dsa.no/radon/slik-maler-du-radon).
 
-The device page's **Visit** link opens this guide. Home Assistant's standard Device info box has no free-text description field. The bundled card shows a short explanation by default; disable **Show radon explanation (Norway)** in its visual editor, or set `show_info: false`. These guidance values do not change your configurable alert thresholds.
+The device page's **Visit** link opens this guide. Home Assistant's standard Device info box has no free-text description field. The bundled card shows a collapsed About radon section by default; disable **Show radon explanation (Norway)** in its visual editor, or set `show_info: false`. These guidance values do not change your configurable alert thresholds.
