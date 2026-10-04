@@ -4,6 +4,10 @@ from datetime import timedelta
 import logging
 from homeassistant.const import Platform
 from homeassistant.components.http import StaticPathConfig
+from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.lovelace.const import LOVELACE_DATA
+from homeassistant.components.lovelace.resources import ResourceStorageCollection
+from .frontend import async_register_card_resource
 from homeassistant.core import callback
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.storage import Store
@@ -23,6 +27,16 @@ async def async_setup(hass, config):
     await hass.http.async_register_static_paths([StaticPathConfig(
         "/radon_monitor/radon-monitor-card.js",
         str(Path(__file__).parent / "www" / "radon-monitor-card.js"), False)])
+    card_url = "/radon_monitor/radon-monitor-card.js?v=0.2.3"
+    try:
+        resources = hass.data[LOVELACE_DATA].resources
+        if isinstance(resources, ResourceStorageCollection):
+            await async_register_card_resource(resources, card_url)
+        else:
+            # YAML is user-owned; load globally without rewriting configuration.
+            add_extra_js_url(hass, card_url)
+    except Exception:
+        _LOGGER.exception("Unable to register card automatically; add %s as a dashboard module resource", card_url)
     return True
 
 
