@@ -119,3 +119,21 @@ class AlertTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+
+class WeeklyTrendTests(unittest.TestCase):
+    def rows(self, previous, current):
+        return [{"start": (NOW-timedelta(hours=336-i)).timestamp(), "mean": previous if i<168 else current} for i in range(336)]
+
+    def test_adjacent_weeks(self):
+        for previous,current,direction in [(20,30,"rising"),(30,20,"falling"),(20,20,"steady"),(10,0,"falling")]:
+            result=e.weekly_trend(self.rows(previous,current),NOW)
+            self.assertEqual(result["direction"],direction)
+            self.assertEqual(result["change"],current-previous)
+            self.assertEqual(result["previous_average"],previous)
+
+    def test_missing_history(self):
+        for rows in [[],self.rows(20,30)[168:],self.rows(20,30)[20:]]:
+            result=e.weekly_trend(rows,NOW)
+            self.assertEqual(result["direction"],"unavailable")
+            self.assertIsNone(result["change"])
