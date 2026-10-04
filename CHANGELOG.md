@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.4
+
+- Expand the visual card editor with average selection, weekly trend, coverage details, compact alerts and graph period controls; keep advanced entity overrides collapsed.
+- Add graph buttons for 7 days, 30 days, 6 months, 1 year and 2 years. Long ranges use daily means while graph mounts remain stable during routine updates.
+- Compare adjacent seven-day source averages with coverage checks, exposed as status attributes without adding entities.
+- Hide detailed coverage by default, retain partial-history warnings, and collapse healthy alerts into an expandable summary. Unknown or active alerts stay visible.
+- Preserve existing card YAML, entities, alerts and historical data. Automatically update the card resource to v0.2.4.
+
 ## 0.2.3
 
 - Register the card resource automatically, updating existing versions without creating another entry; use frontend module loading for YAML resources.

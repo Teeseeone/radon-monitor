@@ -1,4 +1,4 @@
-# Radon Monitor — 0.2.3 experimental
+# Radon Monitor — 0.2.4 experimental
 
 ![Radon Monitor](docs/banner.svg)
 
@@ -45,7 +45,7 @@ After installing/updating and restarting:
 
 1. Enable Advanced Mode in your HA user profile if Resources is hidden.
 2. The integration automatically registers its card resource. Restart HA and refresh the frontend after updating. For manual fallback, use **Settings → Dashboards → three-dot menu → Resources → Add resource**.
-3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.3`; type: **JavaScript module**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.4`; type: **JavaScript module**.
 4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
 5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
 
@@ -61,7 +61,11 @@ show_graph: true
 days_to_show: 7
 ```
 
-The source trend uses HA's built-in statistics graph with hourly means from the original source. Average entity history starts at installation; its numeric value still uses earlier source statistics. Trend days can be set from 1 to 30 in the editor. Turn off **Show source trend** for a compact card. Coverage is hourly bucket availability. Partial history is visibly marked.
+The source trend uses HA's built-in statistics graph with hourly means from the original source. Average entity history starts at installation; its numeric value still uses earlier source statistics. The visual editor selects the initial graph period: 7 days, 30 days, 6 months, 1 year or 2 years. Period buttons on the card switch the displayed graph without editing YAML; they are temporary and reset to the configured period when the card reloads. Long ranges use daily means, short ranges hourly means. Turn off **Show source trend** for a compact card. Coverage is hourly bucket availability. Partial history is visibly marked; detailed percentages are hidden by default and can be enabled in the editor. Healthy alerts collapse into an expandable “All checks OK” row; active or unknown alerts remain visible.
+
+**Configure through the GUI:** edit your dashboard → edit the Radon Monitor card → **Show visual editor** if the code editor is open. Choose the concentration sensor, title, appearance, which averages to show, weekly trend, coverage details, compact alerts, graph period, period buttons and expandable information. Entity overrides live in the Advanced section. Existing YAML remains supported, but is not needed for normal configuration.
+
+The weekly trend compares the latest seven-day mean with the preceding seven-day mean, refreshed with source statistics. It requires at least 99% hourly bucket coverage in both weeks; otherwise it displays “Weekly trend unavailable”. The change is in the source-normalized Bq/m³, independent of individual current readings.
 
 ### Branding
 
