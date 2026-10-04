@@ -29,3 +29,21 @@ card.setConfig({entity:'sensor.room_concentration',show_graph:false});card.hass=
 card.setConfig({entity:'sensor.room_concentration',appearance:'theme',show_graph:false});card.hass={states};assert.doesNotMatch(card.shadowRoot.innerHTML,/--ha-card-background:#082c4c/);
 assert.equal(context.window.customCards.length,1);
 console.log('Card rendering checks passed: valid/zero/missing values, alerts, partial coverage, escaping, entity overrides, editor and more-info event.');
+(async()=>{
+ const stable=new Card();stable.setConfig({entity:'sensor.test_concentration',show_graph:true});
+ let creates=0, mounts=0, resets=0;
+ const graphNode={firstElementChild:null,replaceChildren(...children){mounts++;this.firstElementChild=children[0]||null;}};
+ const details={open:false};const body={innerHTML:'',querySelector:()=>details};const style={textContent:''};
+ stable.shadowRoot.querySelector=selector=>selector==='#graph'?graphNode:selector==='.body'?body:selector==='style'?style:null;
+ let finishHelpers;context.window.loadCardHelpers=()=>new Promise(resolve=>{finishHelpers=resolve;});
+ let fixture={'sensor.test_concentration':{state:'44',attributes:{source:'sensor.source'}},'sensor.source':{state:'44',attributes:{}}};
+ stable.hass={states:fixture};stable.hass={states:{...fixture,'sensor.other':{state:'1'}}};
+ assert.equal(mounts,1); // pending graph cleared once; unrelated update skipped
+ fixture={...fixture,'sensor.test_concentration':{state:'45',attributes:{source:'sensor.source'}}};stable.hass={states:fixture};
+ assert.equal(mounts,1); // no second graph request while helpers are pending
+ finishHelpers({createCardElement:()=>{creates++;return {};}});await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(creates,1);assert.equal(mounts,2);const graph=graphNode.firstElementChild;
+ details.open=true;fixture={...fixture,'sensor.test_concentration':{state:'46',attributes:{source:'sensor.source'}}};stable.hass={states:fixture};await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(graphNode.firstElementChild,graph);assert.equal(mounts,2);assert.equal(details.open,true);
+ console.log('Graph lifecycle checks passed: unrelated updates skipped, pending helpers shared, graph stays mounted and explanation state preserved.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
