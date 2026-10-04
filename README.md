@@ -1,4 +1,4 @@
-# Radon Monitor — 0.2.4 experimental
+# Radon Monitor — 0.2.5 experimental
 
 ![Radon Monitor](docs/banner.svg)
 
@@ -45,7 +45,7 @@ After installing/updating and restarting:
 
 1. Enable Advanced Mode in your HA user profile if Resources is hidden.
 2. The integration automatically registers its card resource. Restart HA and refresh the frontend after updating. For manual fallback, use **Settings → Dashboards → three-dot menu → Resources → Add resource**.
-3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.4`; type: **JavaScript module**.
+3. URL: `/radon_monitor/radon-monitor-card.js?v=0.2.5`; type: **JavaScript module**.
 4. Refresh your browser, edit a dashboard, and add **Radon Monitor** from the card picker.
 5. Choose the Radon Monitor **concentration** entity in its visual editor. Optional overrides support renamed entities and multiple monitors.
 
@@ -60,6 +60,8 @@ entity: sensor.radon_monitor_concentration
 show_graph: true
 days_to_show: 7
 ```
+
+The card displays its JavaScript version beside the details hint. If this version differs from the installed integration, fully refresh the frontend cache. Sections use automatic content height; if you previously set a fixed card height, switch the card Layout tab back to automatic.
 
 The source trend uses HA's built-in statistics graph with hourly means from the original source. Average entity history starts at installation; its numeric value still uses earlier source statistics. The visual editor selects the initial graph period: 7 days, 30 days, 6 months, 1 year or 2 years. Period buttons on the card switch the displayed graph without editing YAML; they are temporary and reset to the configured period when the card reloads. Long ranges use daily means, short ranges hourly means. Turn off **Show source trend** for a compact card. Coverage is hourly bucket availability. Partial history is visibly marked; detailed percentages are hidden by default and can be enabled in the editor. Healthy alerts collapse into an expandable “All checks OK” row; active or unknown alerts remain visible.
 

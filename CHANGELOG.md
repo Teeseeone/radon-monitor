@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.5
+
+- Use content-driven section height instead of a fixed row count; display the outer card as a block.
+- Ignore report timestamps, source-only updates and status age when displayed values have not changed.
+- Forward HA state to the mounted graph at most once per minute; retain its own statistics refresh timer.
+- Skip repeated identical configuration and keep the visual editor form stable during sensor updates.
+- Show the loaded JavaScript version on the card to identify stale frontend caches.
+
 ## 0.2.4
 
 - Expand the visual card editor with average selection, weekly trend, coverage details, compact alerts and graph period controls; keep advanced entity overrides collapsed.
