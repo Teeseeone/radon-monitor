@@ -41,7 +41,7 @@ class RadonStatus(RadonEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
-        return {"sustained_alert": self.coordinator.alerts.data["alert"], "source_age_seconds": self.coordinator.data["source_age_seconds"], "history_error": self.coordinator.data["history_error"]}
+        return {"sustained_alert": self.coordinator.alerts.data["alert"], "source_age_seconds": self.coordinator.data["source_age_seconds"], "history_error": self.coordinator.data["history_error"], "weekly_trend": self.coordinator.data["weekly_trend"]}
 
 
 class RadonAverage(RadonEntity, SensorEntity):

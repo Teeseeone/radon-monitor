@@ -65,6 +65,20 @@ def average(rows, start, end):
     }
 
 
+def weekly_trend(rows, now):
+    """Compare adjacent seven-day averages only with adequate bucket coverage."""
+    end_previous = now - timedelta(days=7)
+    current = average(rows, end_previous, now)
+    previous = average(rows, now - timedelta(days=14), end_previous)
+    result = {"direction": "unavailable", "change": None,
+              "previous_average": previous["value"]}
+    if current["partial"] or previous["partial"] or current["value"] is None or previous["value"] is None:
+        return result
+    change = round(current["value"] - previous["value"], 2)
+    result.update(direction="rising" if change > 0 else "falling" if change < 0 else "steady", change=change)
+    return result
+
+
 class AlertState:
     """Independent sustained thresholds; invalid data breaks concentration timers."""
     def __init__(self, saved=None):

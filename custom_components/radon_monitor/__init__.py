@@ -16,7 +16,7 @@ from homeassistant.components.recorder import get_instance
 from homeassistant.components.recorder.statistics import statistics_during_period
 from homeassistant.util import dt as dt_util
 from .const import DEFAULTS, DOMAIN
-from .engine import AlertState, PERIODS, average, concentration, window_start
+from .engine import AlertState, PERIODS, average, concentration, window_start, weekly_trend
 
 _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
@@ -27,7 +27,7 @@ async def async_setup(hass, config):
     await hass.http.async_register_static_paths([StaticPathConfig(
         "/radon_monitor/radon-monitor-card.js",
         str(Path(__file__).parent / "www" / "radon-monitor-card.js"), False)])
-    card_url = "/radon_monitor/radon-monitor-card.js?v=0.2.3"
+    card_url = "/radon_monitor/radon-monitor-card.js?v=0.2.4"
     try:
         resources = hass.data[LOVELACE_DATA].resources
         if isinstance(resources, ResourceStorageCollection):
@@ -111,7 +111,7 @@ class RadonCoordinator(DataUpdateCoordinator):
         self.store.async_delay_save(lambda: self.alerts.data, 10)
         return {
             "value": value, "status": status, "source_age_seconds": age,
-            "history_error": self.history_error,
+            "history_error": self.history_error, "weekly_trend": weekly_trend(self.rows, now) if self.history_error is None else {"direction": "unavailable", "change": None, "previous_average": None},
             "averages": {key: average(self.rows, window_start(now, key), now) for key in PERIODS},
         }
 
